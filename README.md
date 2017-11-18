@@ -18,3 +18,7 @@ Once set up, this would work as follows:
 - Amazon updates IP Ranges 
 - Update message sent to subscribed SNS topic and triggers the Lambda function 
 - Lambda drops current rules in tagged security groups, re-populates with latest IP ranges
+
+### Additional Considerations
+
+- Lambda Function Uses modules outside of boto3, specifically requests so use Zip file for deployment
