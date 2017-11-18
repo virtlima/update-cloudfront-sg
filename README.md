@@ -16,5 +16,5 @@ This Lambda code and SAM template together update security groups when cloudfron
 Once set up, this would work as follows:
 
 - Amazon updates IP Ranges 
-- Ppdate message sent to subscribed SNS topic and triggers the Lambda function 
+- Update message sent to subscribed SNS topic and triggers the Lambda function 
 - Lambda drops current rules in tagged security groups, re-populates with latest IP ranges
