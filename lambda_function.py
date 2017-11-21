@@ -34,25 +34,18 @@ def lambda_handler(event, context):
 	# Setup variables to create rules
 	http_params = {
 		'FromPort': 80,
-		'IpRanges': [],
+		'IpRanges': [{'CidrIp': ip} for ip in cloudfront_ip['CLOUDFRONT_GLOBAL_IP_LIST']],
 		'ToPort': 80,
 		'IpProtocol': 'tcp',
 	}
 
 	https_params = {
 		'FromPort': 443,
-		'IpRanges': [],
+		'IpRanges': [{'CidrIp': ip} for ip in cloudfront_ip['CLOUDFRONT_GLOBAL_IP_LIST']],
 		'ToPort': 443,
 		'IpProtocol': 'tcp',
 	}
 
-	authorize_http_ips = http_params.copy()
-	authorize_https_ips = https_params.copy()
-
-	# Populate IPs into the parameter variable
-	for ip in cloudfront_ip['CLOUDFRONT_GLOBAL_IP_LIST']:
-		authorize_http_ips['IpRanges'].append({'CidrIp': ip})
-		authorize_https_ips['IpRanges'].append({'CidrIp': ip})
 
 	# Drop existing rules
 	for sgid in sg_ids:
@@ -62,6 +55,6 @@ def lambda_handler(event, context):
 	# Create Rules
 	for sgid in sg_ids:
 		sg = ec2r.SecurityGroup(sgid)
-		sg.authorize_ingress(IpPermissions=[authorize_http_ips,authorize_https_ips])
+		sg.authorize_ingress(IpPermissions=[http_params,https_params])
 
 
